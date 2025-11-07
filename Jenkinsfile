@@ -1,42 +1,42 @@
 pipeline {
     angent any 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
+        DOCKERHUB_CREDENTIALS = credentials('docker-creds')
         DOCKER_IMAGE = "gokulk306/apache-server:${env.BUILD_NUMBER}"
     }
 
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                git branch: 'main', url: 'https://github.com/Gokulk-306/apache-cicd.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    docker.build(DOCKER_IMAGE)
-                }
+                sh 'docker build -t ${DOCKER_IMAGE}:latest .'
             }
         }
 
         stage('Push to Docker Hub') {
             steps {
-                script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
-                        docker.image(DOCKER_IMAGE).push()
-                    }
-                }
+                sh """
+                echo ${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin
+                docker push ${DOCKER_IMAGE}:latest
+                """
             }
         }
 
         stage('Deploy to Kubernetes') {
             steps {
-                script {
-                    sh """
-                    kubectl set image deployment/Apache-deployment apache=${DOCKER_IMAGE} --record
-                    """
-                }
+                sh 'kubectl apply -f deployment.yml'
+            }
+        }
+
+        stage('Access information') {
+            steps {
+                sh 'kubectl get pods'
+                sh 'kubectl get svc'
             }
         }
     }
