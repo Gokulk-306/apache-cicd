@@ -22,7 +22,7 @@ pipeline {
             steps {
                 sh """
                 echo ${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin
-                docker push ${DOCKER_IMAGE}:latest
+                docker push ${DOCKER_IMAGE}
                 """
             }
         }
