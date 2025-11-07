@@ -37,12 +37,6 @@ pipeline {
             steps {
                 sh 'kubectl get pods'
                 sh 'kubectl get svc'
-                sh '''
-                    echo "Forwarding port..."
-                    kubectl port-forward service/apache-service 9090:80 &
-                    sleep 5
-                    curl -I http://18.188.55.157:9090
-                '''
             }
         }
     }
