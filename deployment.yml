@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: apache
-        image: gokulk306/apache-server:latest
+        image: gokulk306/apache-server:9
         ports:
         - containerPort: 80
 ---
