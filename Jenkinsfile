@@ -37,6 +37,7 @@ pipeline {
             steps {
                 sh 'kubectl get pods'
                 sh 'kubectl get svc'
+                sh 'kubectl port-forward service/apache-service 8080:80'
             }
         }
     }
