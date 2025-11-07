@@ -1,5 +1,5 @@
 pipeline {
-    angent any 
+    agent any 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('docker-creds')
         DOCKER_IMAGE = "gokulk306/apache-server:${env.BUILD_NUMBER}"
